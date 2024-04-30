@@ -1,33 +1,83 @@
-# Project
+# Deploy a WordPress VM to Azure Action
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+## Description
 
-As the maintainer of this project, please make a few updates:
+This GitHub Action automates the deployment of a Azure Virtual Machine (VM) with a complete LAMP ((Linux, Apache, MySQL, PHP) stack, then installs and initializes WordPress. The action provisions the VM and deploys the necessary components using an ARM template and parameter file.
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+Once the deployment is finished, you need to go to http://fqdn.of.your.vm/wordpress/ to finish the configuration, create an account, and get started with WordPress.
 
-## Contributing
+[For more information on this quickstart template](https://learn.microsoft.com/en-us/samples/azure/azure-quickstart-templates/wordpress-single-vm-ubuntu/)
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+**This documentation is for v4 of vaibbavisk20/deploy_wordpress_vm_azure**
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+## Inputs
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+Please install the Azure OIDC app from the GitHub Marketplace to populate the below inputs as secrets in your repo
 
-## Trademarks
+- **client-id** (required): Client ID used for Azure login.
+- **tenant-id** (required): Tenant ID used for Azure login.
+- **subscription-id** (required): Azure subscription ID used with the `az login`.
+- **resource-group-name** (required): Resource group where Azure resources will be deployed.
 
-This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft 
-trademarks or logos is subject to and must follow 
-[Microsoft's Trademark & Brand Guidelines](https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general).
-Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship.
-Any use of third-party trademarks or logos are subject to those third-party's policies.
+Set these values as secrets on your repo where the workflow runs
+
+- **admin-username** (required): Admin username to log in to the VM.
+  
+  Username must only contain letters, numbers, hyphens, and underscores and may not start with a hyphen or number.
+  Usernames must not include reserved words.
+  The value is in between 1 and 64 characters long.
+  
+- **admin-password** (required): Admin password to login to the App and mySql password.
+
+  Password must have 3 of the following: 1 lowercase character, 1 uppercase character, 1 number, and 1 special character.
+  The value must be between 12 and 72 characters long.
+
+## Usage
+
+Create this workflow in your repo on this path: `.github/workflows/workflow_file.yml`
+
+```yaml
+name: Workflow to deploy WordPress VM on Azure
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy-resources-to-azure:
+    runs-on: ubuntu-latest
+    steps:
+        - name: Checkout main
+          uses: actions/checkout@v3
+          
+        - name: Deploy a WordPress VM to Azure action
+          # for microsoft tenant
+          uses: vaibbavisk20/deploy_wordpress_vm_azure/.github/actions/custom_template@v2
+          # for non microsoft tenant
+          uses: vaibbavisk20/deploy_wordpress_vm_azure/.github/actions/quickstart_template@v2
+          with:
+            client-id: ${{ secrets.AZURE_CLIENT_ID }}
+            tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+            subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+            resource-group-name: ${{secrets.AZURE_RG}}
+            admin-username: ${{secrets.ADMIN_USERNAME}}
+            admin-password: ${{secrets.ADMIN_PASSWORD}}
+```
+## Output
+
+The action creates a Wordpress VM which can be viewed on portal.azure.com and provides information about the deployed resources.
+
+
+
+
+        
+
