@@ -1,5 +1,4 @@
-# Deploy a WordPress VM to Azure Action
-
+# Deploy a WordPress Virtual Machine on Azure
 ## Description
 
 This GitHub Action automates the deployment of a Azure Virtual Machine (VM) with a complete LAMP ((Linux, Apache, MySQL, PHP) stack, then installs and initializes WordPress. The action provisions the VM and deploys the necessary components using an ARM template and parameter file.
@@ -8,11 +7,10 @@ Once the deployment is finished, you need to go to http://fqdn.of.your.vm/wordpr
 
 [For more information on this quickstart template](https://learn.microsoft.com/en-us/samples/azure/azure-quickstart-templates/wordpress-single-vm-ubuntu/)
 
-**This documentation is for v4 of vaibbavisk20/deploy_wordpress_vm_azure**
 
 ## Inputs
 
-Please install the Azure OIDC app from the GitHub Marketplace to populate the below inputs as secrets in your repo
+Please install the Configure-Azure-Settings app from the GitHub Marketplace to populate the below inputs as secrets in your repo
 
 - **client-id** (required): Client ID used for Azure login.
 - **tenant-id** (required): Tenant ID used for Azure login.
