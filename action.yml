@@ -1,4 +1,4 @@
-name: 'Deploy a Wordpress VM to Azure action - Custom Template'
+name: 'Deploy WordPress on Azure Virtual Machine - Azure Quickstart Template'
 description: 'This action helps create an Azure VM and deploy Wordpress on it'
 branding:
   icon: 'play-circle'
@@ -17,10 +17,10 @@ inputs:
     description: 'Resource group to deploy your resources to'
     required: true
   admin-username:
-    description: 'Admin username to login to vm'
+    description: 'Admin username to login to app'
     required: true
   admin-password:
-    description: 'Admin password to login to vm'
+    description: 'Admin password to login to app and mySql'
     required: true
 
 runs:
@@ -35,59 +35,26 @@ runs:
         client-id: ${{ inputs.client-id }}
         tenant-id: ${{ inputs.tenant-id }}
         subscription-id: ${{ inputs.subscription-id }}
-        enable-AzPSSession: false
+        enable-AzPSSession: true
 
-    - name: 'Accept Bitnami marketplace terms'
-      shell: bash
-      run: |
-        az vm image terms accept --urn bitnami:wordpress:4-4:latest
-        
-    - name: 'Az deploy - Wordpress on VM Bitnami'
+    - name: 'Az deploy - Wordpress on VM'
       uses: azure/arm-deploy@v1
       with:
         subscriptionId: ${{ inputs.subscription-id }}
         resourceGroupName: ${{ inputs.resource-group-name }}
-        template: https://raw.githubusercontent.com/vaibbavisk20/deploy_wordpress_vm_azure/main/vm_template.json
-        parameters: https://raw.githubusercontent.com/vaibbavisk20/deploy_wordpress_vm_azure/main/vm_parameters.json
+        template: https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/application-workloads/wordpress/wordpress-single-vm-ubuntu/azuredeploy.json
+        parameters: https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/application-workloads/wordpress/wordpress-single-vm-ubuntu/azuredeploy.parameters.json
+                    authenticationType=password
+                    mySqlPassword=${{ inputs.admin-password }}
+                    vmDnsName=dns-vm-2
+                    vmSize=Standard_D2as_v4
                     adminUsername=${{ inputs.admin-username }}
-                    adminPassword=${{ inputs.admin-password }}
+                    adminPasswordOrKey=${{inputs.admin-password}}
         failOnStdErr: false
-
-    # - name: 'Az deploy - LAMP on VM Bitnami'
-    #   uses: azure/arm-deploy@v1
-    #   with:
-    #     subscriptionId: ${{ inputs.subscription-id }}
-    #     resourceGroupName: ${{ inputs.resource-group-name }}
-    #     template: https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/application-workloads/wordpress/wordpress-single-vm-ubuntu/azuredeploy.json
-    #     parameters: https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/application-workloads/wordpress/wordpress-single-vm-ubuntu/azuredeploy.parameters.json
-    #                 mySqlPassword=${{ inputs.admin-password }}
-    #                 adminPasswordOrKey=${{ inputs.admin-password }}
-    #                 vmDnsName='wordpress-dns-t1'
-    #                 adminUsername=${{inputs.admin-username}}
-    #     failOnStdErr: false
-
-    - name: Fetch JSON file from remote repository
-      shell: bash
-      run: |
-        json_url="https://raw.githubusercontent.com/vaibbavisk20/deploy_wordpress_vm_azure/main/vm_parameters.json"
-        curl -sSLO $json_url
-
-    - name: Print parameter value
-      shell: bash
-      run: |
-        json_file="vm_parameters.json"
-        # vm name
-        virtual_machine_name=".parameters.virtualMachineName.value"
-        result=$(jq -r "$virtual_machine_name" "$json_file")
-        echo "Virtual Machine Properties"
-        echo "Name: $result"
-
-        # region
-        location=".parameters.location.value"
-        result=$(jq -r "$location" "$json_file")
-        echo "Location: $result"
-
-        # vm size
-        virtual_machine_size=".parameters.virtualMachineSize.value"
-        result=$(jq -r "$virtual_machine_size" "$json_file")
-        echo "VM Size: $result"
+      
+    - name: Fetch deployment record - Run Azure PowerShell inline script
+      uses: azure/powershell@v1
+      with:
+        inlineScript: |
+          Get-AzResourceGroupDeploymentOperation -ResourceGroupName ${{ inputs.resource-group-name }} -DeploymentName "azuredeploy"
+        azPSVersion: "latest"

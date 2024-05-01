@@ -37,7 +37,7 @@ Set these values as secrets on your repo where the workflow runs
 Create this workflow in your repo on this path: `.github/workflows/workflow_file.yml`
 
 ```yaml
-name: Workflow to deploy WordPress VM on Azure
+name: Workflow to deploy WordPress Virtual Machine on Azure
 
 on:
   push:
@@ -59,11 +59,8 @@ jobs:
         - name: Checkout main
           uses: actions/checkout@v3
           
-        - name: Deploy a WordPress VM to Azure action
-          # for microsoft tenant
-          uses: vaibbavisk20/deploy_wordpress_vm_azure/.github/actions/custom_template@v2
-          # for non microsoft tenant
-          uses: vaibbavisk20/deploy_wordpress_vm_azure/.github/actions/quickstart_template@v2
+        - name: Deploy WordPress on an Azure Virtual Machine
+          uses: Azure/WordPress-Azure-VirtualMachine@v2
           with:
             client-id: ${{ secrets.AZURE_CLIENT_ID }}
             tenant-id: ${{ secrets.AZURE_TENANT_ID }}
