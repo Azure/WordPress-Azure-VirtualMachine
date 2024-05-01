@@ -10,7 +10,7 @@ Once the deployment is finished, you need to go to http://fqdn.of.your.vm/wordpr
 
 ## Inputs
 
-Please install the Configure-Azure-Settings app from the GitHub Marketplace to populate the below inputs as secrets in your repo
+Please install the [Configure-Azure-Settings](https://github.com/apps/configure-azure-settings) app from the GitHub Marketplace to populate the below inputs as secrets in your repo
 
 - **client-id** (required): Client ID used for Azure login.
 - **tenant-id** (required): Tenant ID used for Azure login.
