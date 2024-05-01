@@ -8,9 +8,9 @@ Once the deployment is finished, you need to go to http://fqdn.of.your.vm/wordpr
 [For more information on this quickstart template](https://learn.microsoft.com/en-us/samples/azure/azure-quickstart-templates/wordpress-single-vm-ubuntu/)
 
 
-## Inputs
+Note: Please install the [Configure-Azure-Settings](https://github.com/apps/configure-azure-settings) app from the GitHub Marketplace to populate the below inputs as secrets in your repository
 
-Please install the [Configure-Azure-Settings](https://github.com/apps/configure-azure-settings) app from the GitHub Marketplace to populate the below inputs as secrets in your repo
+## Inputs
 
 - **client-id** (required): Client ID used for Azure login.
 - **tenant-id** (required): Tenant ID used for Azure login.
