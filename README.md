@@ -1,7 +1,7 @@
 # Deploy a WordPress Virtual Machine on Azure
 ## Description
 
-This GitHub Action automates the deployment of a Azure Virtual Machine (VM) with a complete LAMP ((Linux, Apache, MySQL, PHP) stack, then installs and initializes WordPress. The action provisions the VM and deploys the necessary components using an ARM template and parameter file.
+This GitHub Action automates the deployment of a Azure Virtual Machine (VM), then installs and initializes WordPress. The action provisions the VM and deploys the necessary components using an ARM template and parameter file.
 
 Once the deployment is finished, you need to go to http://fqdn.of.your.vm/wordpress/ to finish the configuration, create an account, and get started with WordPress.
 
@@ -58,7 +58,7 @@ jobs:
           uses: actions/checkout@v3
           
         - name: Deploy WordPress on an Azure Virtual Machine
-          uses: Azure/WordPress-Azure-VirtualMachine@v2
+          uses: Azure/WordPress-Azure-VirtualMachine@v3
           with:
             client-id: ${{ secrets.AZURE_CLIENT_ID }}
             tenant-id: ${{ secrets.AZURE_TENANT_ID }}

@@ -1,5 +1,5 @@
 name: 'Deploy WordPress on Azure Virtual Machine - Azure Quickstart Template'
-description: 'This action helps create an Azure VM and deploy Wordpress on it'
+description: 'This action helps create an Azure Virtual Machine and deploy Wordpress on it'
 branding:
   icon: 'play-circle'
   color: 'blue'
