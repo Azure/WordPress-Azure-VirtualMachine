@@ -1,7 +1,7 @@
 # Deploy a WordPress Virtual Machine on Azure
 ## Description
 
-This GitHub Action automates the deployment of a Azure Virtual Machine (VM), then installs and initializes WordPress. The action provisions the VM and deploys the necessary components using an ARM template and parameter file.
+This GitHub Action automates the deployment of an Azure Virtual Machine (VM), then installs and initializes WordPress. The action provisions the VM and deploys the necessary components using an ARM template and parameter file.
 
 Once the deployment is finished, you need to go to http://fqdn.of.your.vm/wordpress/ to finish the configuration, create an account, and get started with WordPress.
 
@@ -17,13 +17,13 @@ Note: Please install the [Configure-Azure-Settings](https://github.com/apps/conf
 - **subscription-id** (required): Azure subscription ID used with the `az login`.
 - **resource-group-name** (required): Resource group where Azure resources will be deployed.
 
-Set these values as secrets on your repo where the workflow runs
+Set these values as secrets on your repo where the workflow runs:
 
 - **admin-username** (required): Admin username to log in to the VM.
   
   Username must only contain letters, numbers, hyphens, and underscores and may not start with a hyphen or number.
   Usernames must not include reserved words.
-  The value is in between 1 and 64 characters long.
+  The value must be between 1 and 64 characters long.
   
 - **admin-password** (required): Admin password to login to the App and mySql password.
 
@@ -70,9 +70,3 @@ jobs:
 ## Output
 
 The action creates a Wordpress VM which can be viewed on portal.azure.com and provides information about the deployed resources.
-
-
-
-
-        
-
